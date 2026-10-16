@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="50%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#0d9488" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#818cf8" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#022c22" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect width="512" height="512" rx="128" fill="url(#bg)" />
+
+  <!-- Inner Soft Glow -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="4" />
+
+  <!-- Chat Bubble Background -->
+  <g filter="url(#shadow)">
+    <path d="M140 148 C140 120, 162 98, 190 98 L322 98 C350 98, 372 120, 372 148 L372 268 C372 296, 350 318, 322 318 L232 318 L168 376 C158 385, 140 378, 140 364 L140 318 Z" fill="#ffffff" />
+  </g>
+
+  <!-- Direct Messaging Paper Plane / Bolt Symbol inside chat bubble -->
+  <g transform="translate(186, 146)">
+    <!-- Send Arrow -->
+    <path d="M12 70 L126 12 L70 126 L54 84 Z" fill="url(#bg)" />
+    <path d="M54 84 L126 12" stroke="#047857" stroke-width="6" stroke-linecap="round" />
+  </g>
+
+  <!-- Live Pulse Badge (Instant Send Indicator) -->
+  <circle cx="376" cy="136" r="32" fill="#22c55e" stroke="#ffffff" stroke-width="6" />
+  <path d="M370 136 L374 140 L383 131" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

@@ -1,0 +1,6 @@
+{
+  "name": "DirectMsg: Direct Chat & APK",
+  "description": "Send WhatsApp, WhatsApp Business, SMS, Telegram, and Signal messages directly without saving the contact. Includes instant country selection, message templates, AI greeting cards, and installable PWA / Android APK.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
