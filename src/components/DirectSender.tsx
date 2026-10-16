@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Send,
   Copy,
   Check,
   QrCode,
   Clipboard,
   X,
-  Phone,
-  MessageCircle,
-  PhoneCall,
-  Settings,
+  ChevronDown,
+  Sparkles,
+  CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
 import {
   Country,
@@ -21,6 +20,13 @@ import {
 } from '../utils/phone';
 import { HistoryItem } from './HistoryDrawer';
 import { Language, TRANSLATIONS } from '../utils/translations';
+import {
+  WhatsAppIcon,
+  WhatsAppBusinessIcon,
+  TelegramIcon,
+  SmsIcon,
+  PhoneCallIcon,
+} from './BrandIcons';
 
 interface Props {
   onOpenQR: (url: string, phone: string, platformName: string) => void;
@@ -53,7 +59,6 @@ export const DirectSender: React.FC<Props> = ({
     }
   }, [initialPhone]);
 
-  // Clean phone number using defaultCountry dial code
   const cleanedPhone = cleanPhoneNumber(phoneInput, defaultCountry.dialCode);
   const validation = validatePhoneNumber(cleanedPhone);
 
@@ -70,7 +75,7 @@ export const DirectSender: React.FC<Props> = ({
         triggerToast(t.copied);
       }
     } catch {
-      // Fallback
+      // Browser permissions or mobile clipboard fallback
     }
   };
 
@@ -92,7 +97,6 @@ export const DirectSender: React.FC<Props> = ({
       message: message.trim() || undefined,
     });
 
-    // For Android intent, custom app schemes, sms, tel: use location.href so the OS intent opens directly without popup blocker
     if (
       targetUrl.startsWith('intent:') ||
       targetUrl.startsWith('whatsapp') ||
@@ -118,62 +122,63 @@ export const DirectSender: React.FC<Props> = ({
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  // Helper icon for platform
-  const getPlatformIcon = (id: string) => {
-    switch (id) {
-      case 'call':
-        return <PhoneCall className="w-4 h-4" />;
-      default:
-        return <MessageCircle className="w-4 h-4" />;
+  const deliveryText = 'السلام عليكم عدكم طلب توصيل يرجى ارسال الموقع';
+  const isDeliveryTextActive = message === deliveryText;
+
+  const toggleDeliveryText = () => {
+    if (isDeliveryTextActive) {
+      setMessage('');
+    } else {
+      setMessage(deliveryText);
     }
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="w-full max-w-lg mx-auto" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 py-2 px-4 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-2xl animate-fade-in flex items-center gap-2">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 py-2 px-4 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-2xl flex items-center gap-2 animate-bounce">
           <Check className="w-4 h-4" />
           <span>{showToast}</span>
         </div>
       )}
 
       {/* Main Card */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl backdrop-blur-xl relative">
-        {/* Subtle glow */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Header Title */}
-        <div className="mb-4 text-center sm:text-start">
-          <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight flex items-center justify-center sm:justify-start gap-2">
-            <MessageCircle className="w-5 h-5 text-emerald-400" />
-            <span>{t.tagline}</span>
-          </h2>
-          <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-slate-400 mt-1">
-            <span>{t.defaultCountryHint}</span>
-            <button
-              onClick={onOpenSettings}
-              className="inline-flex items-center gap-1 font-mono font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 transition cursor-pointer"
-              title={t.changeInSettings}
-            >
-              <span>{defaultCountry.flag}</span>
-              <span>{defaultCountry.dialCode}</span>
-              <Settings className="w-3 h-3 text-emerald-400" />
-            </button>
+      <div className="bg-[#121927] border border-slate-800/90 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+        {/* Country & Dial Code Bar */}
+        <div className="flex items-center justify-between pb-3 border-b border-slate-800/70">
+          <div className="flex items-center gap-2">
+            <span className="text-xl leading-none">{defaultCountry.flag}</span>
+            <span className="text-sm font-semibold text-white">
+              {isRTL ? defaultCountry.nameAr : defaultCountry.name}
+            </span>
+            <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
+              {defaultCountry.dialCode}
+            </span>
           </div>
+
+          <button
+            type="button"
+            onClick={onOpenSettings}
+            className="flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-emerald-400 transition cursor-pointer py-1 px-2 rounded-lg hover:bg-slate-800"
+            title={t.changeInSettings}
+          >
+            <span>{isRTL ? 'تغيير الدولة' : 'Change country'}</span>
+            <ChevronDown className="w-3.5 h-3.5" />
+          </button>
         </div>
 
-        {/* 1. Phone Input Row (Hidden country selector by the field as requested) */}
-        <div className="space-y-1.5 mb-3.5">
+        {/* 1. Phone Input Row */}
+        <div className="space-y-2">
           <div className="flex items-center justify-between text-xs">
-            <label htmlFor="phone-input-field" className="font-semibold text-slate-300">
+            <label htmlFor="phone-input-field" className="font-semibold text-slate-200">
               {t.phoneLabel}
             </label>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={handlePaste}
-                className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium transition cursor-pointer"
+                className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium transition cursor-pointer bg-emerald-500/10 hover:bg-emerald-500/20 px-2 py-1 rounded-lg"
               >
                 <Clipboard className="w-3.5 h-3.5" />
                 <span>{t.paste}</span>
@@ -182,7 +187,7 @@ export const DirectSender: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => setPhoneInput('')}
-                  className="text-slate-400 hover:text-rose-400 flex items-center gap-1 transition cursor-pointer"
+                  className="text-slate-400 hover:text-rose-400 flex items-center gap-1 transition cursor-pointer px-1.5 py-1 rounded-lg hover:bg-slate-800"
                 >
                   <X className="w-3.5 h-3.5" />
                   <span>{t.clear}</span>
@@ -191,47 +196,89 @@ export const DirectSender: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="relative rounded-2xl bg-slate-950/80 border border-slate-700/80 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition">
+          <div className="relative rounded-2xl bg-[#0B111C] border border-slate-700/80 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition">
             <input
               id="phone-input-field"
               type="tel"
               value={phoneInput}
               onChange={(e) => setPhoneInput(e.target.value)}
-              placeholder={t.phonePlaceholder}
-              className="w-full bg-transparent px-4 py-3 text-base sm:text-lg font-mono text-white placeholder-slate-500 focus:outline-none"
+              placeholder=""
+              className="w-full bg-transparent px-4 py-3.5 text-2xl font-bold font-mono text-white focus:outline-none tracking-wide"
               autoComplete="tel"
             />
           </div>
 
           {/* Validation Feedback */}
-          <div className="flex items-center justify-between text-[11px] px-1 min-h-[18px]">
+          <div className="flex items-center text-xs px-1 min-h-[20px]">
             {phoneInput ? (
               validation.isValid ? (
-                <span className="text-emerald-400 font-medium flex items-center gap-1">
-                  <Check className="w-3 h-3" />
+                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                   <span>{t.readyToSend}</span>
-                  <strong className="font-mono">{formatDisplayPhone(cleanedPhone)}</strong>
+                  <strong className="font-mono font-bold text-white tracking-wider">{formatDisplayPhone(cleanedPhone)}</strong>
                 </span>
               ) : (
-                <span className="text-amber-400 font-medium">
-                  {t.invalidPhone}
+                <span className="text-amber-400 font-medium flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                  <span>{t.invalidPhone}</span>
                 </span>
               )
             ) : (
               <span className="text-slate-500 text-[11px]">
-                {t.defaultCountryDesc}
+                {isRTL
+                  ? 'اكتب الرقم وسيقوم التطبيق بإضافة المفتاح الدولي تلقائياً'
+                  : 'Enter the number directly; country code is added automatically'}
               </span>
             )}
           </div>
         </div>
 
-        {/* 2. Message Area (Compact with 2 rows) */}
-        <div className="space-y-1.5 mb-3.5">
-          <div className="flex items-center justify-between text-xs">
-            <label htmlFor="message-input-field" className="font-semibold text-slate-300">
+        {/* 2. Quick Delivery Order Preset (Requested exclusively by user) */}
+        <div className="pt-0.5">
+          <button
+            type="button"
+            onClick={toggleDeliveryText}
+            className={`w-full text-right sm:text-start flex items-center justify-between gap-3 p-3 rounded-2xl border transition cursor-pointer ${
+              isDeliveryTextActive
+                ? 'bg-emerald-500/15 border-emerald-500/60 text-white shadow-sm'
+                : 'bg-[#0E1524] hover:bg-[#141D30] border-slate-800 text-slate-300 hover:text-white'
+            }`}
+          >
+            <div className="flex items-start gap-2.5 min-w-0 flex-1">
+              <span className="text-lg shrink-0 mt-0.5">📦</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-xs font-semibold text-emerald-400">
+                  {isRTL ? 'نص سريع لطلب التوصيل' : 'Quick Delivery Message'}
+                </span>
+                <span className="text-xs font-medium text-slate-200 leading-relaxed break-words">
+                  {deliveryText}
+                </span>
+              </div>
+            </div>
+
+            <div className="shrink-0 flex items-center gap-1 self-center">
+              {isDeliveryTextActive ? (
+                <span className="w-5 h-5 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center">
+                  <Check className="w-3 h-3 stroke-[3]" />
+                </span>
+              ) : (
+                <span className="text-[11px] font-semibold text-slate-400 bg-slate-800/80 px-2 py-1 rounded-lg">
+                  {isRTL ? 'إدراج' : 'Insert'}
+                </span>
+              )}
+            </div>
+          </button>
+        </div>
+
+        {/* 3. Custom Message (Optional) */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs text-slate-400 px-0.5">
+            <label htmlFor="message-input-field" className="font-medium text-slate-300">
               {t.messageLabel}
             </label>
-            <span className="text-slate-500 font-mono text-[11px]">{message.length}</span>
+            {message.length > 0 && (
+              <span className="font-mono text-[11px] text-slate-500">{message.length}</span>
+            )}
           </div>
 
           <textarea
@@ -239,83 +286,80 @@ export const DirectSender: React.FC<Props> = ({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             rows={2}
-            placeholder={t.messagePlaceholder}
-            className="w-full bg-slate-950/80 border border-slate-700/80 rounded-xl p-2.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition resize-none"
+            placeholder={isRTL ? 'اكتب رسالة إضافية هنا (اختياري)...' : 'Type custom message here (optional)...'}
+            className="w-full bg-[#0B111C] border border-slate-700/70 rounded-xl p-3 text-xs sm:text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition resize-none"
           />
-
-          {/* Quick text chips (Compact) */}
-          <div className="flex flex-wrap items-center gap-1 pt-0.5">
-            <span className="text-[10px] text-slate-400 font-medium">{t.quickText}</span>
-            {t.templates.map((tmpl, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setMessage(tmpl.text)}
-                className="text-[10px] py-0.5 px-2 rounded-md bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/50 transition cursor-pointer"
-              >
-                {tmpl.label}
-              </button>
-            ))}
-          </div>
         </div>
 
-        {/* 3. Compact Apps Grid - Zero scrolling required! */}
-        <div className="space-y-2 mb-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-slate-300">{t.sendVia}:</span>
-            <span className="text-[10px] text-emerald-400">{t.openDirectly}</span>
+        {/* 4. Action Buttons (Authentic Brands, High Contrast, Thumb-Friendly) */}
+        <div className="space-y-2 pt-1">
+          <span className="text-xs font-semibold text-slate-400 block px-0.5">
+            {t.sendVia}:
+          </span>
+
+          {/* Row 1: WhatsApp and WhatsApp Business */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {/* Standard WhatsApp */}
+            <button
+              type="button"
+              onClick={() => handleLaunch(MESSAGING_PLATFORMS[0])}
+              className="py-3.5 px-3 rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-slate-950 font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-[#25D366]/20 transition cursor-pointer active:scale-[0.98]"
+            >
+              <WhatsAppIcon className="w-5 h-5 shrink-0" />
+              <span>{t.whatsapp}</span>
+            </button>
+
+            {/* WhatsApp Business (Strictly com.whatsapp.w4b on Android) */}
+            <button
+              type="button"
+              onClick={() => handleLaunch(MESSAGING_PLATFORMS[1])}
+              className="py-3.5 px-3 rounded-2xl bg-[#008069] hover:bg-[#00705c] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md shadow-[#008069]/20 transition cursor-pointer active:scale-[0.98]"
+            >
+              <WhatsAppBusinessIcon className="w-5 h-5 shrink-0" />
+              <span>{t.whatsappBiz}</span>
+            </button>
           </div>
 
-          {/* Primary Top Messaging Apps (WhatsApp, WhatsApp Business, Telegram, SMS) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {MESSAGING_PLATFORMS.slice(0, 4).map((platform) => (
-              <button
-                key={platform.id}
-                type="button"
-                onClick={() => handleLaunch(platform)}
-                className="group p-2.5 rounded-xl border border-slate-700/70 hover:border-slate-500 bg-slate-950/60 hover:bg-slate-800/80 transition flex items-center justify-between gap-2 cursor-pointer shadow-sm active:scale-95"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <span
-                    className="w-3 h-3 rounded-full shrink-0 shadow-sm"
-                    style={{ backgroundColor: platform.color }}
-                  />
-                  <span className="text-xs font-bold text-white truncate group-hover:text-emerald-400 transition">
-                    {t[platform.nameKey]}
-                  </span>
-                </div>
-                <Send className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition shrink-0" />
-              </button>
-            ))}
-          </div>
-
-          {/* Secondary Messaging Apps (Signal, Viber, Call) */}
+          {/* Row 2: Telegram, SMS, Direct Call */}
           <div className="grid grid-cols-3 gap-2">
-            {MESSAGING_PLATFORMS.slice(4).map((platform) => (
-              <button
-                key={platform.id}
-                type="button"
-                onClick={() => handleLaunch(platform)}
-                className="group py-2 px-2.5 rounded-xl border border-slate-800 hover:border-slate-600 bg-slate-950/40 hover:bg-slate-800/60 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-              >
-                <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: platform.color }}
-                />
-                <span className="text-xs font-medium text-slate-300 group-hover:text-white truncate">
-                  {t[platform.nameKey]}
-                </span>
-              </button>
-            ))}
+            {/* Telegram */}
+            <button
+              type="button"
+              onClick={() => handleLaunch(MESSAGING_PLATFORMS[2])}
+              className="py-2.5 px-2 rounded-xl bg-[#229ED9] hover:bg-[#1e8ec4] text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
+            >
+              <TelegramIcon className="w-4 h-4 shrink-0" />
+              <span>{t.telegram}</span>
+            </button>
+
+            {/* SMS */}
+            <button
+              type="button"
+              onClick={() => handleLaunch(MESSAGING_PLATFORMS[3])}
+              className="py-2.5 px-2 rounded-xl bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-sm"
+            >
+              <SmsIcon className="w-4 h-4 shrink-0" />
+              <span>{t.sms}</span>
+            </button>
+
+            {/* Direct Call */}
+            <button
+              type="button"
+              onClick={() => handleLaunch(MESSAGING_PLATFORMS[6])}
+              className="py-2.5 px-2 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-emerald-400 hover:text-emerald-300 font-semibold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <PhoneCallIcon className="w-4 h-4 shrink-0" />
+              <span>{t.call}</span>
+            </button>
           </div>
         </div>
 
-        {/* 4. Instant Action Utilities: Copy Link & Show QR Code */}
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+        {/* 5. Bottom Utilities: Copy Link & Show QR Code */}
+        <div className="flex items-center gap-2 pt-2 border-t border-slate-800/80">
           <button
             type="button"
             onClick={handleCopyLink}
-            className="flex-1 py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+            className="flex-1 py-2 px-3 rounded-xl bg-slate-800/70 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-medium flex items-center justify-center gap-1.5 transition cursor-pointer border border-slate-700/50"
           >
             {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copiedLink ? t.copied : t.copyLink}</span>
@@ -331,7 +375,7 @@ export const DirectSender: React.FC<Props> = ({
               const defaultUrl = `https://wa.me/${cleanedPhone}${message.trim() ? `?text=${encodeURIComponent(message.trim())}` : ''}`;
               onOpenQR(defaultUrl, cleanedPhone, t.whatsapp);
             }}
-            className="flex-1 py-2 px-3 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+            className="flex-1 py-2 px-3 rounded-xl bg-slate-800/70 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-medium flex items-center justify-center gap-1.5 transition cursor-pointer border border-slate-700/50"
           >
             <QrCode className="w-3.5 h-3.5 text-emerald-400" />
             <span>{t.qrCode}</span>

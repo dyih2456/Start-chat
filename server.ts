@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import http from 'http';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,6 +11,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = parseInt(process.env.PORT || '3000', 10);
+const server = http.createServer(app);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +25,17 @@ app.get('/api/health', (_req: Request, res: Response) => {
   });
 });
 
-// Mount Vite or serve static assets
+// Download standalone HTML file
+app.get('/download-html', (_req: Request, res: Response) => {
+  const filePath = path.join(__dirname, 'public', 'direct-chat.html');
+  res.download(filePath, 'direct-chat.html', (err) => {
+    if (err) {
+      res.status(500).send('Error downloading file');
+    }
+  });
+});
+
+// Mount Vite in development or serve static assets in production
 async function startServer() {
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'dist')));
@@ -32,14 +44,20 @@ async function startServer() {
     });
   } else {
     const { createServer: createViteServer } = await import('vite');
+    // HMR is disabled in AI Studio container environment (DISABLE_HMR=true)
+    const isHmrDisabled = process.env.DISABLE_HMR === 'true';
+
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: isHmrDisabled ? false : { server },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
   }
 
-  app.listen(port, '0.0.0.0', () => {
+  server.listen(port, '0.0.0.0', () => {
     console.log(`direct~chat Server running at http://0.0.0.0:${port}`);
   });
 }

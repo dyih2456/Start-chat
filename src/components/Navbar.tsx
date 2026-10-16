@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  MessageSquare,
   Clock,
   Settings,
   HelpCircle,
+  MessageCircle,
 } from 'lucide-react';
 import { Language, TRANSLATIONS } from '../utils/translations';
 
@@ -26,34 +26,47 @@ export const Navbar: React.FC<Props> = ({
   const isRTL = lang === 'ar';
 
   return (
-    <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800" dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-3">
-        {/* Logo and Brand: prototype~w */}
+    <header className="sticky top-0 z-40 bg-[#0B0F17]/90 backdrop-blur-md border-b border-slate-800/80 transition-colors" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="max-w-xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
+        {/* Brand Zone */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-600 via-teal-500 to-emerald-400 p-0.5 shadow-md shadow-emerald-500/20">
-            <div className="w-full h-full bg-slate-900 rounded-[6px] flex items-center justify-center">
-              <MessageSquare className="w-4 h-4 text-emerald-400" />
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-[1.5px] shadow-sm">
+            <div className="w-full h-full bg-[#0E1524] rounded-[10px] flex items-center justify-center">
+              <MessageCircle className="w-4 h-4 text-emerald-400" />
             </div>
           </div>
-          <div>
-            <span className="font-extrabold text-white text-base tracking-tight font-mono">
-              {t.appName}
-            </span>
-          </div>
+          <span className="font-bold text-white text-base tracking-tight font-sans">
+            {t.appName}
+          </span>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          {/* Direct HTML File Download button */}
+          <a
+            href="/download-html"
+            download="direct-chat.html"
+            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:text-emerald-300 text-xs font-semibold transition cursor-pointer min-h-[36px]"
+            title={isRTL ? 'تنزيل التطبيق كملف HTML واحد يعمل بدون إنترنت' : 'Download app as single offline HTML file'}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span className="hidden sm:inline">{isRTL ? 'ملف HTML' : 'HTML File'}</span>
+          </a>
+
           {/* History drawer button */}
           <button
             onClick={onOpenHistory}
-            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-semibold transition cursor-pointer"
+            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-slate-800/70 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-medium transition cursor-pointer min-h-[36px]"
             title={t.recent}
           >
-            <Clock className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{t.recent}</span>
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-xs">{t.recent}</span>
             {historyCount > 0 && (
-              <span className="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-bold text-[10px] flex items-center justify-center">
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono text-[10px] font-bold">
                 {historyCount}
               </span>
             )}
@@ -62,19 +75,19 @@ export const Navbar: React.FC<Props> = ({
           {/* Settings button */}
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-1.5 py-1.5 px-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-white text-xs font-semibold transition cursor-pointer"
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-xl transition cursor-pointer min-w-[36px] min-h-[36px] flex items-center justify-center"
             title={t.settings}
+            aria-label={t.settings}
           >
-            <Settings className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">{t.settings}</span>
+            <Settings className="w-4 h-4" />
           </button>
 
           {/* Help Button */}
           <button
             onClick={onOpenHelp}
-            className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition"
-            title="Help"
-            aria-label="Help"
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/80 rounded-xl transition cursor-pointer min-w-[36px] min-h-[36px] flex items-center justify-center"
+            title={isRTL ? 'معلومات عن التطبيق والمطور' : 'About & Developer'}
+            aria-label="About"
           >
             <HelpCircle className="w-4 h-4" />
           </button>

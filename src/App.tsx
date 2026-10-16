@@ -13,7 +13,7 @@ export default function App() {
   // Language preference: Default to Arabic ('ar') as requested
   const [lang, setLang] = useState<Language>(() => {
     try {
-      const stored = localStorage.getItem('prototype_w_lang');
+      const stored = localStorage.getItem('direct_chat_lang');
       return (stored === 'en' || stored === 'ar') ? stored : 'ar';
     } catch {
       return 'ar';
@@ -23,7 +23,7 @@ export default function App() {
   // Default Country: Default to Iraq ('IQ' / '+964')
   const [defaultCountry, setDefaultCountry] = useState<Country>(() => {
     try {
-      const storedCode = localStorage.getItem('prototype_w_country_code');
+      const storedCode = localStorage.getItem('direct_chat_country_code');
       const found = COUNTRIES.find((c) => c.code === storedCode);
       return found || COUNTRIES[0]; // Iraq is index 0
     } catch {
@@ -33,7 +33,7 @@ export default function App() {
 
   const [history, setHistory] = useState<HistoryItem[]>(() => {
     try {
-      const stored = localStorage.getItem('prototype_w_history');
+      const stored = localStorage.getItem('direct_chat_history');
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -67,7 +67,7 @@ export default function App() {
   // Persist language
   useEffect(() => {
     try {
-      localStorage.setItem('prototype_w_lang', lang);
+      localStorage.setItem('direct_chat_lang', lang);
       document.documentElement.setAttribute('lang', lang);
       document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
     } catch (e) {
@@ -78,7 +78,7 @@ export default function App() {
   // Persist default country
   useEffect(() => {
     try {
-      localStorage.setItem('prototype_w_country_code', defaultCountry.code);
+      localStorage.setItem('direct_chat_country_code', defaultCountry.code);
     } catch (e) {
       console.warn('Failed to save default country', e);
     }
@@ -87,7 +87,7 @@ export default function App() {
   // Persist history
   useEffect(() => {
     try {
-      localStorage.setItem('prototype_w_history', JSON.stringify(history));
+      localStorage.setItem('direct_chat_history', JSON.stringify(history));
     } catch (e) {
       console.warn('Failed to save history', e);
     }
@@ -152,7 +152,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Offline Alert Indicator */}
       {!isOnline && (
         <div className="bg-amber-500 text-slate-950 px-4 py-1.5 text-xs font-semibold flex items-center justify-center gap-2 sticky top-0 z-50">
@@ -170,8 +170,8 @@ export default function App() {
         lang={lang}
       />
 
-      {/* Main Container - Compact and optimized for zero-scroll */}
-      <main className="flex-1 max-w-xl w-full mx-auto px-3.5 sm:px-4 py-4 sm:py-6 flex flex-col justify-start">
+      {/* Main Container - Compact and optimized for zero-scroll on mobile */}
+      <main className="flex-1 max-w-xl w-full mx-auto px-4 py-4 sm:py-6 flex flex-col justify-start">
         <DirectSender
           onOpenQR={handleOpenQR}
           onOpenSettings={() => setIsSettingsOpen(true)}
@@ -182,11 +182,11 @@ export default function App() {
         />
       </main>
 
-      {/* Minimal Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-3 text-center text-[11px] text-slate-600">
+      {/* Minimal Clean Footer */}
+      <footer className="border-t border-slate-900 bg-[#090D14] py-3 text-center text-xs text-slate-500">
         <div className="max-w-xl mx-auto px-4 flex items-center justify-between">
-          <span className="font-mono text-slate-500">direct~chat</span>
-          <span>{t.tagline}</span>
+          <span className="font-semibold text-slate-400">direct~chat</span>
+          <span className="text-[11px] text-slate-500">{t.tagline}</span>
         </div>
       </footer>
 

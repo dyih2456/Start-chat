@@ -53,7 +53,7 @@ export const QRCodeModal: React.FC<Props> = ({
       <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-5 text-slate-100 flex flex-col items-center">
         <button
           onClick={onClose}
-          className="absolute top-3.5 right-3.5 p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition"
+          className={`absolute top-3.5 ${isRTL ? 'left-3.5' : 'right-3.5'} p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition`}
           aria-label="Close dialog"
         >
           <X className="w-4 h-4" />

@@ -15,11 +15,11 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in" dir={isRTL ? 'rtl' : 'ltr'}>
-      <div className="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-5 md:p-6 text-slate-100 max-h-[88vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0F17]/80 backdrop-blur-sm animate-fade-in" dir={isRTL ? 'rtl' : 'ltr'}>
+      <div className="relative w-full max-w-md bg-[#121927] border border-slate-800 rounded-3xl shadow-2xl p-5 md:p-6 text-slate-100 max-h-[88vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer"
+          className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'} p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer`}
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -31,51 +31,51 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-white font-mono">{t.appName}</h2>
+            <h2 className="text-base font-bold text-white font-sans">{t.appName}</h2>
             <p className="text-xs text-slate-400">{t.tagline}</p>
           </div>
         </div>
 
         <div className="space-y-3.5 text-xs text-slate-300">
           {/* App Overview */}
-          <div className="p-3.5 bg-slate-800/50 rounded-2xl border border-slate-700/50 space-y-2">
+          <div className="p-3.5 bg-[#0E1524] rounded-2xl border border-slate-800 space-y-2">
             <div className="flex items-center gap-1.5 text-white font-semibold">
               <Zap className="w-4 h-4 text-emerald-400" />
               <span>{t.aboutApp}</span>
             </div>
-            <p className="text-slate-300 leading-relaxed text-[11px]">
+            <p className="text-slate-300 leading-relaxed text-xs">
               {t.appDescription}
             </p>
           </div>
 
           {/* Features Highlights */}
-          <div className="space-y-1.5 p-3 bg-slate-950/60 rounded-xl border border-slate-800/80">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
+          <div className="space-y-1.5 p-3.5 bg-[#0E1524] rounded-2xl border border-slate-800">
+            <span className="text-xs font-bold text-slate-300 block mb-1">
               {isRTL ? 'المميزات الرئيسية:' : 'Key Features:'}
             </span>
-            <div className="space-y-1 text-[11px] text-slate-300">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+            <div className="space-y-1.5 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{isRTL ? 'دعم واتساب العادي وواتساب أعمال بشكل منفصل تماماً' : 'Separate WhatsApp & WhatsApp Business intent isolation'}</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                <span>{isRTL ? 'إرسال مباشر عبر تليجرام، SMS، سيجنال، وفايبر' : 'Direct send via Telegram, SMS, Signal, and Viber'}</span>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>{isRTL ? 'إرسال مباشر عبر تليجرام، SMS، واتصال هاتف' : 'Direct send via Telegram, SMS, and direct Call'}</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{isRTL ? 'رمز دولة افتراضي دائم (مثل العراق 🇮🇶 +964)' : 'Permanent default country dial code (e.g. Iraq +964)'}</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>{isRTL ? 'نص سريع لطلب التوصيل والموقع بنقرة واحدة' : '1-tap quick text for delivery order & location request'}</span>
               </div>
             </div>
           </div>
 
-          {/* Developer GitHub Card as requested */}
-          <div className="p-3.5 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-emerald-500/30 rounded-2xl space-y-2">
-            <span className="text-[11px] font-semibold text-emerald-400 flex items-center gap-1.5">
+          {/* Developer GitHub Card as requested by user */}
+          <div className="p-3.5 bg-gradient-to-r from-[#0E1524] to-[#141E33] border border-emerald-500/30 rounded-2xl space-y-2">
+            <span className="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
               <Github className="w-4 h-4" />
               <span>{t.developer}</span>
             </span>
@@ -86,10 +86,10 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
               href="https://github.com/admin-art1"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-2.5 bg-slate-800/90 hover:bg-slate-800 text-white rounded-xl border border-slate-700/80 hover:border-emerald-500/50 transition cursor-pointer group"
+              className="flex items-center justify-between p-2.5 bg-[#0B101B] hover:bg-[#0F1626] text-white rounded-xl border border-slate-700/80 hover:border-emerald-500/50 transition cursor-pointer group"
             >
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                   <Github className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex flex-col">
@@ -98,6 +98,38 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
                 </div>
               </div>
               <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-emerald-400 transition" />
+            </a>
+          </div>
+
+          {/* Standalone HTML File Card */}
+          <div className="p-3.5 bg-gradient-to-r from-[#0E1524] to-[#132034] border border-blue-500/30 rounded-2xl space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-blue-400 flex items-center gap-1.5">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>{isRTL ? 'تطبيق direct~chat كملف HTML واحد مستقل' : 'Standalone Single HTML File Version'}</span>
+              </span>
+              <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold">Offline</span>
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed">
+              {isRTL 
+                ? 'تم تحويل التطبيق بالكامل إلى ملف HTML واحد يحتوي على كل المميزات، يعمل بدون إنترنت على الهاتف والكمبيوتر بمجرد النقر المزدوج.' 
+                : 'The full app packaged into a single standalone HTML file. Works completely offline on mobile and desktop without a server.'}
+            </p>
+            <a
+              href="/download-html"
+              download="direct-chat.html"
+              className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-sm cursor-pointer"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>{isRTL ? 'تنزيل ملف direct-chat.html' : 'Download direct-chat.html'}</span>
             </a>
           </div>
 
@@ -112,7 +144,7 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
         <div className="mt-5 flex justify-end">
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition cursor-pointer"
+            className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl transition cursor-pointer shadow-md"
           >
             {t.done}
           </button>

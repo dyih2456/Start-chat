@@ -1,9 +1,24 @@
+@import "@fontsource/cairo/400.css";
+@import "@fontsource/cairo/500.css";
+@import "@fontsource/cairo/600.css";
+@import "@fontsource/cairo/700.css";
+@import "@fontsource/cairo/800.css";
 @import "tailwindcss";
 
 :root {
-  font-family: 'Cairo', 'Scheherazade', 'KacstOne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'Cairo', 'Scheherazade', 'KacstOne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Cairo', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #0b0f17;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+}
+
+/* Tabular digits for numbers */
+.font-tabular {
+  font-variant-numeric: tabular-nums;
 }
