@@ -101,38 +101,6 @@ export const HelpModal: React.FC<Props> = ({ isOpen, onClose, lang }) => {
             </a>
           </div>
 
-          {/* Standalone HTML File Card */}
-          <div className="p-3.5 bg-gradient-to-r from-[#0E1524] to-[#132034] border border-blue-500/30 rounded-2xl space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-blue-400 flex items-center gap-1.5">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>{isRTL ? 'تطبيق direct~chat كملف HTML واحد مستقل' : 'Standalone Single HTML File Version'}</span>
-              </span>
-              <span className="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold">Offline</span>
-            </div>
-            <p className="text-[11px] text-slate-300 leading-relaxed">
-              {isRTL 
-                ? 'تم تحويل التطبيق بالكامل إلى ملف HTML واحد يحتوي على كل المميزات، يعمل بدون إنترنت على الهاتف والكمبيوتر بمجرد النقر المزدوج.' 
-                : 'The full app packaged into a single standalone HTML file. Works completely offline on mobile and desktop without a server.'}
-            </p>
-            <a
-              href="/download-html"
-              download="direct-chat.html"
-              className="flex items-center justify-center gap-2 w-full py-2 px-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition shadow-sm cursor-pointer"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>{isRTL ? 'تنزيل ملف direct-chat.html' : 'Download direct-chat.html'}</span>
-            </a>
-          </div>
-
           {/* Privacy Note */}
           <div className="p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-xl flex items-start gap-2 text-[11px] text-slate-400">
             <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
